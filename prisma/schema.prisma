@@ -1,0 +1,240 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Settings ────────────────────────────────────────────────────────────────
+
+model SeoSetting {
+  id              Int      @id @default(autoincrement())
+  siteName        String?
+  siteTitle       String?
+  metadescription String?
+  metaKeywords    String?
+  metaImage       String?
+  favicon         String?
+  gtmId           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model HeaderSetting {
+  id          Int      @id @default(autoincrement())
+  headerLogo  String?
+  emailLogo   String?
+  headerText  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Category ────────────────────────────────────────────────────────────────
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  image       String?
+  img         String?
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+}
+
+// ─── Product ─────────────────────────────────────────────────────────────────
+
+model Product {
+  id               String              @id @default(cuid())
+  title            String
+  slug             String              @unique
+  shortDescription String
+  description      String?
+  body             String?
+  price            Decimal
+  discountedPrice  Decimal?
+  quantity         Int                 @default(0)
+  sku              String?
+  tags             String[]
+  offers           String[]
+  categoryId       Int?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  category              Category?               @relation(fields: [categoryId], references: [id])
+  productVariants       ProductVariant[]
+  additionalInformation AdditionalInformation[]
+  customAttributes      CustomAttribute[]
+  reviews               Review[]
+  heroBanners           HeroBanner[]
+  heroSliders           HeroSlider[]
+  countdowns            Countdown[]
+}
+
+model ProductVariant {
+  id        Int     @id @default(autoincrement())
+  image     String
+  color     String
+  size      String
+  isDefault Boolean @default(false)
+  productId String
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model AdditionalInformation {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  productId   String
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model CustomAttribute {
+  id            Int                    @id @default(autoincrement())
+  attributeName String
+  productId     String
+
+  product         Product                @relation(fields: [productId], references: [id], onDelete: Cascade)
+  attributeValues CustomAttributeValue[]
+}
+
+model CustomAttributeValue {
+  id               String @id @default(cuid())
+  title            String
+  customAttributeId Int
+
+  customAttribute CustomAttribute @relation(fields: [customAttributeId], references: [id], onDelete: Cascade)
+}
+
+// ─── Review ──────────────────────────────────────────────────────────────────
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  comment     String
+  ratings     Float
+  isApproved  Boolean  @default(false)
+  productSlug String
+  productId   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+}
+
+// ─── Hero ─────────────────────────────────────────────────────────────────────
+
+model HeroBanner {
+  id          Int      @id @default(autoincrement())
+  bannerName  String?
+  bannerImage String
+  slug        String
+  productId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model HeroSlider {
+  id           Int      @id @default(autoincrement())
+  sliderName   String
+  sliderImage  String
+  discountRate Float    @default(0)
+  slug         String
+  productId    String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+// ─── Countdown ───────────────────────────────────────────────────────────────
+
+model Countdown {
+  id             Int      @id @default(autoincrement())
+  title          String
+  subtitle       String?
+  image          String?
+  countdownImage String?
+  date           DateTime
+  productId      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+// ─── Orders ──────────────────────────────────────────────────────────────────
+
+model Order {
+  id              String      @id @default(cuid())
+  stripeSessionId String      @unique
+  customerEmail   String
+  customerName    String?
+  totalAmount     Int
+  currency        String      @default("usd")
+  status          String      @default("pending")
+  shippingAddress String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  items           OrderItem[]
+
+  // ── Shopify Shipping & Tracking ──
+  shopifyOrderId  String?     // Shopify's order ID after sync
+  trackingNumber  String?     // AWB / tracking number from courier
+  trackingUrl     String?     // Courier tracking URL
+  courierName     String?     // e.g. "Delhivery", "BlueDart", "DTDC"
+  shippingStatus  String      @default("unfulfilled") // unfulfilled, shipped, in_transit, delivered
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   String
+  productId String?
+  name      String
+  price     Int
+  quantity  Int
+  image     String?
+  slug      String?
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+// ─── User ────────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String?
+  image     String?
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Blog ────────────────────────────────────────────────────────────────────
+
+model Blog {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  excerpt   String
+  content   String   @db.Text
+  category  String
+  image     String?
+  author    String   @default("CozyCommerce Admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
