@@ -10,7 +10,7 @@ export async function proxy(req: NextRequest) {
     const email = token?.email;
 
     const whitelistedEmails = [
-      "admin@cozycommerce.com",
+      "orvioncare@gmail.com",
     ];
 
     // If unauthenticated or user email is not a whitelisted administrator

@@ -25,13 +25,13 @@ const authOptions: NextAuthOptions = {
 
         // 1. Static Admin Fallback for easy setup
         if (
-          normalizedEmail === "admin@cozycommerce.com" &&
-          credentials.password === "admin123"
+          normalizedEmail === "orvioncare@gmail.com" &&
+          credentials.password === "Mavtar@2026"
         ) {
           return {
             id: "admin-static-user",
             name: "CozyCommerce Admin",
-            email: "admin@cozycommerce.com",
+            email: "orvioncare@gmail.com",
             image: null,
             role: "admin"
           };

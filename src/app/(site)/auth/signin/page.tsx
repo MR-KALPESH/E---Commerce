@@ -25,7 +25,7 @@ function SignInForm() {
     setIsLoading(true);
     try {
       const normalizedEmail = email.toLowerCase();
-      const isAdmin = normalizedEmail === "admin@cozycommerce.com";
+      const isAdmin = normalizedEmail === "orvioncare@gmail.com";
 
       const result = await signIn("credentials", {
         email,

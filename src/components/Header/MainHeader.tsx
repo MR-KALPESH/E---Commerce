@@ -158,7 +158,7 @@ const MainHeader = ({ headerData }: IProps) => {
                       <p className="text-xs font-bold text-dark truncate mt-0.5">{session.user?.name || session.user?.email}</p>
                     </div>
 
-                    {session.user?.email === "admin@cozycommerce.com" && (
+                    {session.user?.email === "orvioncare@gmail.com" && (
                       <Link
                         href="/admin"
                         onClick={() => setProfileDropdownOpen(false)}

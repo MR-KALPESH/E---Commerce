@@ -99,10 +99,7 @@ const ProductItem = ({ item, bgClr = "[#F6F7FB]" }: Props) => {
         className={`relative overflow-hidden border border-gray-3 flex items-center justify-center rounded-xl bg-white h-[270px] w-full mb-4`}
       >
         <Link
-          href={`${pathUrl.includes("products")
-            ? `${item?.slug}`
-            : `products/${item?.slug}`
-            }`}
+          href={`/products/${item?.slug}`}
           className="relative w-full h-full block"
         >
           {(defaultVariant?.image || item.productVariants?.[0]?.image) ? (
@@ -166,10 +163,7 @@ const ProductItem = ({ item, bgClr = "[#F6F7FB]" }: Props) => {
 
       <h3 className="font-semibold text-dark ease-out text-base duration-200 hover:text-blue mb-1.5 line-clamp-1">
         <Link
-          href={`${pathUrl.includes("products")
-            ? `${item?.slug}`
-            : `products/${item?.slug}`
-            }`}
+          href={`/products/${item?.slug}`}
         >
           {" "}
           {item.title}{" "}

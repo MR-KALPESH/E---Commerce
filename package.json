@@ -8,7 +8,8 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
-    "import-demo-data": "node scripts/import-demo-data.js"
+    "import-demo-data": "node scripts/import-demo-data.js",
+    "sync-algolia": "node --env-file=.env scripts/sync-algolia.js"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

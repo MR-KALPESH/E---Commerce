@@ -171,7 +171,7 @@ const MobileMenu = ({ isOpen, onClose, menuData, headerLogo }: MobileMenuProps) 
                   Hello, {session.user?.name || "User"}
                 </span>
                 <div className="flex items-center gap-3">
-                  {session.user?.email === "admin@cozycommerce.com" && (
+                  {session.user?.email === "orvioncare@gmail.com" && (
                     <Link
                       href="/admin"
                       className="text-sm font-semibold text-blue hover:underline"

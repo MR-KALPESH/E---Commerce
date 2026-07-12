@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       where: { email: normalizedEmail },
     });
 
-    if (existingUser || normalizedEmail === "admin@cozycommerce.com") {
+    if (existingUser || normalizedEmail === "orvioncare@gmail.com") {
       return NextResponse.json(
         { error: "An account with this email already exists" },
         { status: 400 }
